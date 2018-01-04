@@ -20,11 +20,12 @@
         <link rel="stylesheet" href="assets/css/font-awesome.min.css">
         <link rel="stylesheet" href="assets/css/index.css">
         <link rel="stylesheet" href="assets/css/timeline.css">
+        <script src="https://cn.vuejs.org/js/vue.js" ></script>
     </head>
     <body>        
         <header class="header"></header>
         
-        <div class="container">
+        <div class="container" id="app">
             <div class="row">
                 <div class="col-xs-12 col-md-4" style="padding:2px;">
                     <div class="side">
@@ -35,7 +36,7 @@
                                 <img class="avatar" src="assets/images/avatar.jpg">
                             </section>
 
-                            <p class="name">张大侠<br />前端开发工程师 / 杭州</p>
+                            <p class="name">{{ basic.name }}<br />{{ basic.position }} / {{ basic.location }}</p>
 
                         </section>
                         
@@ -54,39 +55,39 @@
                                     <ul class="list-unstyled">
                                         <li>
                                             <span class="fn-icon"><i class="fa fa-male"></i></span>
-                                            <span class="fn-item">张大侠 / 男 / 24岁</span>
+                                            <span class="fn-item">{{ basic.name }} / {{ basic.sex }} / {{ basic.age }}</span>
                                         </li>
                                         <li>
                                             <span class="fn-icon"><i class="fa fa-graduation-cap"></i></span>
-                                            <span class="fn-item">大学本科</span>
+                                            <span class="fn-item">{{ basic.lastest_edu }}</span>
                                         </li>
                                         <li>
                                             <span class="fn-icon"><i class="fa fa-phone"></i></span>
-                                            <span class="fn-item"><a href="tel:15814039458" target="_blank">158-1403-9458</a></span>
+                                            <span class="fn-item"><a :href="'tel:' + basic.tel" target="_blank">{{ basic.tel }}</a></span>
                                         </li>
                                         <li>
                                             <span class="fn-icon"><i class="fa fa-envelope"></i></span>
-                                            <span class="fn-item"><a href="ifelse01@gmail.com" target="_blank">ifelse01@gmail.com</a></span>
+                                            <span class="fn-item"><a v-bind:href="'mailto:' + basic.email" target="_blank">{{ basic.email }}</a></span>
                                         </li>
                                         <li>
                                             <span class="fn-icon"><i class="fa fa-map-marker"></i></span>
-                                            <span class="fn-item">深圳</span>
+                                            <span class="fn-item">{{ basic.location }}</span>
                                         </li>
                                         <li>
                                             <span class="fn-icon"><i class="fa fa-briefcase"></i></span>
-                                            <span class="fn-item">10年工作经验</span>
+                                            <span class="fn-item">{{ basic.exp }}</span>
                                         </li>
                                         <li>
                                             <span class="fn-icon"><i class="fa fa-usd"></i></span>
-                                            <span class="fn-item">10k/month</span>
+                                            <span class="fn-item">{{ basic.salary }}</span>
                                         </li>
-                                        <li>
+                                        <li v-if="basic.blog">
                                             <span class="fn-icon"><i class="fa fa-bold"></i></span>
-                                            <span class="fn-item"><a href="http://www.cnblog.cn/dfg727" target="_blank">http://www.cnblog.cn/dfg727</a></span>
+                                            <span class="fn-item"><a :href="basic.blog" target="_blank">{{ basic.blog }}</a></span>
                                         </li>
-                                        <li>
+                                        <li v-if="basic.github">
                                             <span class="fn-icon"><i class="fa fa-github"></i></span>
-                                            <span class="fn-item"><a href="http://www.github.com/dfg727" target="_blank">http://www.github.com//dfg727</a></span>
+                                            <span class="fn-item"><a :href="basic.github" target="_blank">{{ basic.github }}</a></span>
                                         </li>
                                     </ul>
                                 </div>
@@ -94,7 +95,7 @@
                         </section>
                             
                         <!-- 基本信息 -->
-                        <section class="profile info-unit">
+                        <section class="profile info-unit" v-if="skills.length > 0">
                             <div class="row">
                                 <div class="col-xs-2 col-sm-1 ">
                                     <i class="fa fa-file-code-o fn-icon-head" aria-hidden="true"></i>
@@ -106,27 +107,13 @@
                             <div class="row">
                                 <div class="col-xs-10 col-xs-offset-2 col-sm-10 col-sm-offset-1 fn-detail">
                                     <ul class="list-unstyled">
-                                        <li>
-                                            <span class="fn-name">HTML</span>
+                                        <li v-for="skill in skills">
+                                            <span class="fn-name">{{ skill.name }}</span>
                                             <div class="progress">
-                                                <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100" style="width: 95%">
-                                                    95%
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <span class="fn-name">CSS</span>
-                                            <div class="progress">
-                                                <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width: 70%">
-                                                    70%
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <span class="fn-name">Javascript</span>
-                                            <div class="progress">
-                                                <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%">
-                                                    50%
+                                                <div class="progress-bar" 
+                                                    :class="{'progress-bar-success': skill.progress>=80, 'progress-bar-info': skill.progress<80 && skill.progress>=60, 'progress-bar-warning':skill.progress<60 && skill.progress>=40}" 
+                                                    role="progressbar" :aria-valuenow="skill.progress" aria-valuemin="0" aria-valuemax="100" :style="'width: '+skill.progress+'%'">
+                                                    {{ skill.progress }}%
                                                 </div>
                                             </div>
                                         </li>
@@ -138,7 +125,7 @@
                 </div>
 
                 <div class="col-xs-12 col-sm-6 col-md-8" style="padding:2px;">
-                    <div class="main" id="edu" name="edu">
+                    <div class="main" id="edu" name="edu" v-if="edus.length > 0">
                         <section class="profile info-unit">
                             <div class="row">
                                 <div class="col-xs-2 col-sm-1">
@@ -151,22 +138,13 @@
                             <div class="row">
                                 <div class="col-sm-10 col-sm-offset-1 fn-detail">
                                     <ul class="timeline">
-                                        <li>
-                                            <div class="time">2013-07-29 ~ 2013-07-09</div>
+                                        <li v-for="edu in edus">
+                                            <div class="time">{{ edu.period }}</div>
                                             <div class="version"></div>
                                             <div class="number"></div>
                                             <div class="content">
-                                                <div class="timeline-title">深圳大学</div>
-                                                <div class="timeline-body"><p>本科</p></div>
-                                            </div>
-                                        </li>
-                                        <li class="alt">
-                                            <div class="time">2013-07-29 ~ 2013-07-09</div>
-                                            <div class="version"></div>
-                                            <div class="number"></div>
-                                            <div class="content">
-                                                <div class="timeline-title">乐平市第六小学</div>
-                                                <div class="timeline-body"><p>小学</p></div>
+                                                <div class="timeline-title">{{ edu.name }}</div>
+                                                <div class="timeline-body"><p> {{ edu.desc }}</p></div>
                                             </div>
                                         </li>
                                     </ul>
@@ -174,7 +152,7 @@
                             </div>
                         </section>
                     </div>
-                    <div class="main m5" id="exp" name="exp">
+                    <div class="main m5" id="exp" name="exp" v-if="exps.length > 0">
                         <section class="profile info-unit">
                             <div class="row">
                                 <div class="col-xs-2 col-sm-1">
@@ -187,30 +165,15 @@
                             <div class="row">
                                 <div class="col-sm-10 col-sm-offset-1 fn-detail">
                                     <ul class="timeline">
-                                        <li>
-                                            <div class="time">2013-07-29 ~ 2013-07-09</div>
+                                        <li v-for="exp in exps">
+                                            <div class="time">{{ exp.period }}</div>
                                             <div class="version"></div>
                                             <div class="number"></div>
                                             <div class="content">
-                                                <div class="timeline-title">XX公司 - 前端开发工程师</div>
+                                                <div class="timeline-title">{{ exp.name }} - {{ exp.position }}</div>
                                                 <div class="timeline-body">
                                                     <ul class="timeline-body-list">
-                                                        <li>深度参与公司主线产品</li>
-                                                        <li>活动页面的开发</li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li class="alt">
-                                            <div class="time">2013-07-29 ~ 2013-07-09</div>
-                                            <div class="version"></div>
-                                            <div class="number"></div>
-                                            <div class="content">
-                                                <div class="timeline-title">XX公司 - 前端开发工程师</div>
-                                                <div class="timeline-body">
-                                                    <ul class="timeline-body-list">
-                                                        <li>深度参与公司主线产品</li>
-                                                        <li>活动页面的开发</li>
+                                                        <li v-for="desc in exp.descs">{{ desc }}</li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -220,7 +183,7 @@
                             </div>
                         </section>
                     </div>
-                    <div class="main m5" id="proj" name="proj">
+                    <div class="main m5" id="proj" name="proj" v-if="projs && projs.length > 0">
                         <section class="profile info-unit">
                             <div class="row">
                                 <div class="col-xs-2 col-sm-1">
@@ -233,42 +196,21 @@
                             <div class="row">
                                 <div class="col-sm-10 col-sm-offset-1 fn-detail">
                                     <ul class="timeline">
-                                        <li>
-                                            <div class="time">2013-07-29 ~ 11-09</div>
+                                        <li v-for="proj in projs">
+                                            <div class="time">{{ proj.period }}</div>
                                             <div class="version"></div>
                                             <div class="number"></div>
                                             <div class="content">
-                                                <div class="timeline-title">医学科学数据管理与共享平台 - 前端开发</div>
+                                                <div class="timeline-title">{{ proj.name }} - {{ proj.position }}</div>
                                                 <div class="timeline-body">
                                                     <ul class="timeline-body-list">
-                                                        <li>技术栈：HTML 5+D3.js + ECharts + MySQL</li>
+                                                        <li v-if="proj.descs.skills">{{ proj.descs.skills }}</li>
                                                         <li>
                                                             <div>
-                                                                <i class="fa fa-paper-plane-o fn-icon-list"></i> [目标] 实现常见肿瘤流行病数据多维度可视化展示、数据透视及分析<br/>
-                                                                <i class="fa fa-users fn-icon-list"></i> [团队] 与 1 位同学<br/>
-                                                                <i class="fa fa-bars fn-icon-list"></i> [贡献] 分析项目需求，清洗并整理相关数据(扩展第三方知识组织系统和 Google trends 数据)，并用 D3.js 和 ECharts 进行图形化展示以及实现简易自动分析 功能<br/>
-                                                                <i class="fa fa-thumbs-o-up fn-icon-list"></i> [效果] 作品取得第二届共享杯国家级竞赛“特等奖”
-                                                            </div>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li class="alt">
-                                            <div class="time">2013-07-29 ~ 2013-07-09</div>
-                                            <div class="version"></div>
-                                            <div class="number"></div>
-                                            <div class="content">
-                                                <div class="timeline-title">医学科学数据管理与共享平台 - 前端开发</div>
-                                                <div class="timeline-body">
-                                                    <ul class="timeline-body-list">
-                                                        <li>技术栈：ThinkPHP + MongoDB + Axure</li>
-                                                        <li>
-                                                            <div>
-                                                                <i class="fa fa-paper-plane-o fn-icon-list"></i> [目标] 实现多类型多来源医学科学数据的提交、管理和共享<br/>
-                                                                <i class="fa fa-users fn-icon-list"></i> [团队] 与 2 位同学<br/>
-                                                                <i class="fa fa-bars fn-icon-list"></i> [贡献] 完成从“调研-设计-实现-文档”等工作，主要负责系统原型、功能框架及数据提交流程、元数据及源数据的管理与共享方案的设计以及系统开发等工作<br/>
-                                                                <i class="fa fa-thumbs-o-up fn-icon-list"></i> [效果] 作品最终取得第三届共享杯国家级竞赛“一等奖”
+                                                                <i class="fa fa-paper-plane-o fn-icon-list"></i> {{ proj.descs.goal }}<br/>
+                                                                <i class="fa fa-users fn-icon-list"></i> {{ proj.descs.team }}<br/>
+                                                                <i class="fa fa-bars fn-icon-list"></i> {{ proj.descs.contribution }}<br/>
+                                                                <i class="fa fa-thumbs-o-up fn-icon-list"></i> {{ proj.descs.effect }}
                                                             </div>
                                                         </li>
                                                     </ul>
@@ -280,7 +222,7 @@
                             </div>
                         </section>
                     </div>
-                    <div class="main m5" id="personal" name="personal">
+                    <div class="main m5" id="personal" name="personal" v-if="personal_evaluation">
                         <section class="profile info-unit">
                             <div class="row">
                                 <div class="col-xs-2 col-sm-1">
@@ -294,8 +236,7 @@
                                 <div class="col-sm-10 col-sm-offset-1 fn-detail">
                                     <div>
                                         <ul class="body-list">
-                                            <li>“多静多思考，反省不张扬”是我给自己总结的“十字箴言”，鞭策自己做人既不能以己度人，也不以人观己，要脚踏实地做事，坚持自己的梦想和本心</li>
-                                            <li>活动页面的开发</li>
+                                            <li v-for="item in personal_evaluation">{{ item }}</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -316,4 +257,97 @@
             </ul>
         </aside>
     </body>
+    <script>
+        var data = {
+            "basic": {
+                "name": "张大侠",
+                "sex": "男",
+                "age": "18岁",
+                "position": "前端开发工程师",
+                "location": "杭州",
+                "lastest_edu": "大学本科",
+                "tel": "158-1403-9458",
+                "email": "ifelse01@gmail.com",
+                "exp": "10年工作经验",
+                "salary": "10k / month",
+                "blog": "http://www.cnblog.cn/dfg727",
+                "github": "http://www.github.com/dfg727"
+            },
+            "skills": [
+                {
+                    "name": "HTML, C#, SQL",
+                    "progress": 95
+                }, {
+                    "name": "CSS, NodeJS",
+                    "progress": 70
+                }, {
+                    "name": "Javascript",
+                    "progress": 50
+                }
+            ],
+            "edus": [
+                {
+                    "name": "深圳大学",
+                    "period": "2013-07-29 ~ 2013-07-09",
+                    "desc": '本科'
+                }, {
+                    "name": "深圳高中",
+                    "period": "2013-07-29 ~ 2013-07-09",
+                    "desc": '高中'
+                }
+            ],
+            "exps": [
+                {
+                    "name": "XX公司",
+                    "period": "2013-07-29 ~ 2013-07-09",
+                    "position": "前端开发工程师",
+                    "descs": [
+                        "深度参与公司主线产品",
+                        "活动页面的开发"
+                    ]
+                }, {
+                    "name": "XX公司",
+                    "period": "2013-07-29 ~ 2013-07-09",
+                    "position": "前端开发工程师",
+                    "descs": [
+                        "深度参与公司主线产品",
+                        "活动页面的开发"
+                    ]
+                }
+            ],
+            "projs": [
+                {
+                    "name": "医学科学数据管理与共享平台",
+                    "period": "2013-07-29 ~ 2013-07-09",
+                    "position": "前端开发",
+                    "descs": {
+                        "skills": "技术栈：HTML 5+D3.js + ECharts + MySQL",
+                        "goal": "[目标] 实现常见肿瘤流行病数据多维度可视化展示、数据透视及分析",
+                        "team": "[团队] 与 2 位同学",
+                        "contribution": "[贡献] 分析项目需求，清洗并整理相关数据(扩展第三方知识组织系统和 Google trends 数据)，并用 D3.js 和 ECharts 进行图形化展示以及实现简易自动分析 功能",
+                        "effect": "[效果] 作品取得第二届共享杯国家级竞赛“特等奖”"
+                    }    
+                }, {
+                    "name": "医学科学数据管理与共享平台",
+                    "period": "2013-07-29 ~ 2013-07-09",
+                    "position": "前端开发",
+                    "descs": {
+                        "skills": "技术栈：ThinkPHP + MongoDB + Axure",
+                        "goal": "[目标] 实现多类型多来源医学科学数据的提交、管理和共享",
+                        "team": "[团队] 与 2 位同学",
+                        "contribution": "[贡献] 完成从“调研-设计-实现-文档”等工作，主要负责系统原型、功能框架及数据提交流程、元数据及源数据的管理与共享方案的设计以及系统开发等工作",
+                        "effect": "[效果] 作品最终取得第三届共享杯国家级竞赛“一等奖”"
+                    }           
+                }
+            ],
+            "personal_evaluation": [
+                "“多静多思考，反省不张扬”是我给自己总结的“十字箴言”，鞭策自己做人既不能以己度人，也不以人观己，要脚踏实地做事，坚持自己的梦想和本心",
+                "活动页面的开发"
+            ]
+        }
+        var vm = new Vue({
+            el: '#app',
+            data: data
+        })
+    </script>
 </html>
