@@ -33,7 +33,7 @@
                         <section class="me">
                             <section class="portrait">
                                 <!-- 头像照片 -->
-                                <img class="avatar" src="assets/images/avatar.jpg">
+                                <img class="avatar" :src="basic.photo">
                             </section>
 
                             <p class="name">{{ basic.name }}<br />{{ basic.position }} / {{ basic.location }}</p>
@@ -261,6 +261,7 @@
         var data = {
             "basic": {
                 "name": "张大侠",
+                "photo": "assets/images/avatar.jpg",
                 "sex": "男",
                 "age": "18岁",
                 "position": "前端开发工程师",
